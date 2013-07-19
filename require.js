@@ -1510,6 +1510,19 @@ var requirejs, require, define;
 
                 takeGlobalQueue();
 
+                if (config.onCompleteLoadOne) {
+                    config.onCompleteLoadOne.call(this, {
+                        moduleName: moduleName,
+                        defQueue: defQueue,
+                        config: config,
+                        registry: registry,
+                        enabledRegistry: enabledRegistry,
+                        undefEvents: undefEvents,
+                        defined: defined,
+                        urlFetched: urlFetched
+                    });
+                }
+
                 while (defQueue.length) {
                     args = defQueue.shift();
                     if (args[0] === null) {

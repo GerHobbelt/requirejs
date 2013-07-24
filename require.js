@@ -446,6 +446,7 @@ var requirejs, require, define;
                     } else {
                         normalizedName = normalize(name, parentName, applyMap);
                     }
+                    isNormalized = true;
                 } else {
                     //A regular module.
                     normalizedName = normalize(name, parentName, applyMap);
@@ -951,7 +952,7 @@ var requirejs, require, define;
                     //normalized name to load instead of continuing.
                     if (this.map.unnormalized) {
                         //Normalize the ID if the plugin allows it.
-                        if (plugin.normalize) {
+                        if (plugin && plugin.normalize) {
                             name = plugin.normalize(name, function (name) {
                                 return normalize(name, parentName, true);
                             }) || '';

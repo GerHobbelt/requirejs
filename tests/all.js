@@ -15,6 +15,7 @@ doh.registerUrl("urlArgsToUrl", "../urlArgsToUrl.html");
 doh.registerUrl("config", "../config.html");
 doh.registerUrl("configRequirejs", "../configRequirejs.html");
 doh.registerUrl("dataMain", "../dataMain/dataMain.html");
+doh.registerUrl("skipDataMain", "../dataMain/skipDataMain/skipDataMain.html");
 doh.registerUrl("dataMainIndex", "../dataMain/dataMainIndex/dataMainIndex.html");
 doh.registerUrl("dataMainBaseUrl", "../dataMain/baseUrl/dataMainBaseUrl.html");
 
@@ -38,6 +39,7 @@ if (location.href.indexOf('http://127.0.0.1/requirejs/') === 0) {
 
 
 doh.registerUrl("circular", "../circular.html");
+doh.registerUrl("circularDupe", "../circular/dupe/dupe.html");
 doh.registerUrl("circularPlugin", "../circular/circularPlugin.html");
 doh.registerUrl("circularComplexPlugin", "../circular/complexPlugin/complexPlugin.html");
 doh.registerUrl("circular414", "../circular/414/414.html");

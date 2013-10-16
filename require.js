@@ -12,7 +12,7 @@ var requirejs, require, define;
 (function (global) {
     var req, s, head, baseElement, dataMain, src,
         interactiveScript, currentlyAddingScript, mainScript, subPath,
-        version = '2.1.9',
+        version = '2.1.9-noutf',
         commentRegExp = /(\/\*([\s\S]*?)\*\/|([^:]|^)\/\/(.*)$)/mg,
         cjsRequireRegExp = /[^.]\s*require\s*\(\s*["']([^'"\s]+)["']\s*\)/g,
         jsSuffixRegExp = /\.js$/,
@@ -1803,7 +1803,6 @@ var requirejs, require, define;
                 document.createElementNS('http://www.w3.org/1999/xhtml', 'html:script') :
                 document.createElement('script');
         node.type = config.scriptType || 'text/javascript';
-        node.charset = 'utf-8';
         node.async = true;
         return node;
     };

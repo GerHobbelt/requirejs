@@ -6,3 +6,6 @@ dist/dist-build/
 shrinktest.sh
 tests/layers/allplugins-require.js
 tests/packages/optimizing/built/
+
+node_modules/
+node_modules/*

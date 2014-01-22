@@ -1,6 +1,27 @@
 {
-    "volo": {
-        "url": "https://raw.github.com/jrburke/requirejs/{version}/require.js"
+    "name": "mozu-require",
+    "description": "RequireJS customized for Mozu.",
+    "version": "2.1.10",
+    "homepage": "http://github.com/zetlen/mozu-require",
+    "author": "Volusion, Inc.",
+    "licenses": [
+        {
+            "type": "MIT",
+            "url": "https://github.com/zetlen/mozu-require/blob/master/LICENSE"
+        }
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/zetlen/mozu-require.git"
     },
-    "main": "require.js"
+    "devDependencies": {
+        "grunt": "~0.4.0",
+        "grunt-contrib-clean": "~0.4.0",
+        "grunt-contrib-concat": "~0.1.2",
+        "grunt-contrib-uglify": "~0.1.1"
+    },
+    "engines": {
+        "node": ">=0.10.0"
+    },
+    "main": "dist/mozu-require.compiler"
 }

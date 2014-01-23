@@ -1,5 +1,5 @@
 /*! 
- * mozu-require - v2.1.10 - 2014-01-21
+ * mozu-require - v2.1.10 - 2014-01-23
  *
  * Copyright (c) 2014 Volusion, Inc.
  *
@@ -2124,7 +2124,7 @@ var requirejs, require, define;
 
                 // short circuit for mozu builtins
                 if (moduleName in mozuBuiltins)
-                    return (config.cdnPrefix || ("//" + window.location.host)) + mozuBuiltins[moduleName] + (mozuBuiltins[moduleName].indexOf('?') === -1 ? '?' : '&') + "cacheKey=" + (encodeURIComponent(config.cacheKey) || '');
+                    return config.isBuild ? "empty:" : (config.cdnPrefix || ("//" + window.location.host)) + mozuBuiltins[moduleName] + (mozuBuiltins[moduleName].indexOf('?') === -1 ? '?' : '&') + "cacheKey=" + (encodeURIComponent(config.cacheKey) || '');
                 if (pkgMain) {
                     moduleName = pkgMain;
                 }

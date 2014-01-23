@@ -33,7 +33,7 @@ module.exports = function (grunt) {
                 dest: './dist/<%= pkg.name %>.debug.js'
             },
             compiler: {
-                src: ['src/wrap_header.tpl', 'lib/json2.js', 'src/vars-debug.js', 'src/mozu-require.js', 'src/plugins/text.js', 'src/plugins/shim.js', 'src/wrap_footer.tpl'],
+                src: ['src/wrap_header.tpl', 'src/vars-min.js', 'src/mozu-require.js', 'src/wrap_footer.tpl'],
                 dest: './dist/<%= pkg.name %>.compiler.js'
             }
         },

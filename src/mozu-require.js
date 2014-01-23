@@ -1617,7 +1617,7 @@ var requirejs, require, define;
 
                 // short circuit for mozu builtins
                 if (moduleName in mozuBuiltins)
-                    return (config.cdnPrefix || ("//" + window.location.host)) + mozuBuiltins[moduleName] + (mozuBuiltins[moduleName].indexOf('?') === -1 ? '?' : '&') + "cacheKey=" + (encodeURIComponent(config.cacheKey) || '');
+                    return config.isBuild ? "empty:" : (config.cdnPrefix || ("//" + window.location.host)) + mozuBuiltins[moduleName] + (mozuBuiltins[moduleName].indexOf('?') === -1 ? '?' : '&') + "cacheKey=" + (encodeURIComponent(config.cacheKey) || '');
                 if (pkgMain) {
                     moduleName = pkgMain;
                 }

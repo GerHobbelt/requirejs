@@ -1,5 +1,5 @@
 /*! 
- * mozu-require - v2.1.10 - 2014-01-23
+ * mozu-require - v2.1.10 - 2014-01-24
  *
  * Copyright (c) 2014 Volusion, Inc.
  *
@@ -515,7 +515,6 @@ var storeMode = "debug",
 /*jslint regexp: true, nomen: true, sloppy: true */
 /*global window, navigator, document, importScripts, setTimeout, opera */
 
-var requirejs, require, define;
 (function (global) {
     var req, s, head, baseElement, dataMain, src,
         interactiveScript, currentlyAddingScript, mainScript, subPath,

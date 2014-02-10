@@ -1647,7 +1647,9 @@ var requirejs, require, define;
                     url = (url.charAt(0) === '/' || url.match(/^[\w\+\.\-]+:/) ? '' : config.baseUrl) + url;
                 }
 
-                return config.urlArgs ? url +
+				// JS: add check for urls that begin with a //. 
+				// we don't want to add urlArgs to urls that we don't own.
+                return config.urlArgs && ! /\/\//.test(url) ? url +
                                         ((url.indexOf('?') === -1 ? '?' : '&') +
                                          config.urlArgs) : url;
             },

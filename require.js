@@ -6,10 +6,11 @@
 //Not using strict: uneven strict support in browsers, #392, and causes
 //problems with requirejs.exec()/transpiler plugins that may not be strict.
 /*jslint regexp: true, nomen: true, sloppy: true */
-/*global window, navigator, document, importScripts, setTimeout, opera */
+/*global window, navigator, document, importScripts, setTimeout, opera, nrdp */
 
 var requirejs, require, define;
-(function (global) {
+
+function init (global) {
     var req, s, head, baseElement, dataMain, src,
         interactiveScript, currentlyAddingScript, mainScript, subPath,
         version = '2.1.11',
@@ -23,6 +24,7 @@ var requirejs, require, define;
         ap = Array.prototype,
         apsp = ap.splice,
         isBrowser = !!(typeof window !== 'undefined' && typeof navigator !== 'undefined' && window.document),
+        isNrdp = !isBrowser && typeof nrdp !== 'undefined',
         isWebWorker = !isBrowser && typeof importScripts !== 'undefined',
         //PS3 indicates loaded and complete, but need to wait for complete
         //specifically. Sequence is 'loading', 'loaded', execution,
@@ -1833,7 +1835,10 @@ var requirejs, require, define;
      */
     req.load = function (context, moduleName, url) {
         var config = (context && context.config) || {},
-            node;
+            node,
+            timeoutId,
+            doError;
+
         if (isBrowser) {
             //In the browser so use a script tag
             node = req.createNode(config, moduleName, url);
@@ -1917,6 +1922,43 @@ var requirejs, require, define;
                                 [moduleName]));
             }
         }
+        else if (isNrdp) {
+            doError = function (reason) {
+                var error = makeError(
+                        'loadScript',
+                        'loadScript failed for ' + moduleName + ' at ' + url,
+                        reason,
+                        [moduleName]
+                    );
+                    context.onError(error);
+            };
+
+            nrdp.gibbon.loadScript({
+                url: url,
+                async: true
+            }, function (resp) {
+                var isSuccess = resp.reason === nrdp.gibbon.SUCCESS,
+                    status = resp.status,
+                    isOk = status >= 200 && status <= 300,
+                    error;
+
+                clearTimeout(timeoutId);
+
+                if (isSuccess && isOk) {
+                    context.completeLoad(moduleName);
+                }
+                else {
+                    doError(resp.reason);
+                }
+            });
+
+            timeoutId = setTimeout(
+                function () { doError('timeout'); },
+                config.waitSeconds
+            );
+
+            return timeoutId;
+        }
     };
 
     function getInteractiveScript() {
@@ -1976,6 +2018,11 @@ var requirejs, require, define;
                 return true;
             }
         });
+    }
+    else if (isNrdp) {
+        if (!cfg.baseUrl) {
+            cfg.baseUrl = './';
+        }
     }
 
     /**
@@ -2065,4 +2112,16 @@ var requirejs, require, define;
 
     //Set up with config info.
     req(cfg);
-}(this));
+}
+// nrdp#ready wrapper
+if (typeof nrdp !== 'undefined') {
+    nrdp.addEventListener('init', function requireJsInit () {
+        nrdp.removeEventListener('init', requireJsInit);
+        init(this);
+    });
+    nrdp.init();
+}
+else {
+    init(this);
+}
+

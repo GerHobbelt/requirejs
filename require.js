@@ -38,7 +38,9 @@ function init (global) {
         contexts = {},
         cfg = {},
         globalDefQueue = [],
-        useInteractive = false;
+        useInteractive = false,
+        setTimeout = isNrdp ? nrdp.gibbon.setTimeout : setTimeout,
+        clearTimeout = isNrdp ? nrdp.gibbon.clearTimeout : clearTimeout;
 
     function isFunction(it) {
         return ostring.call(it) === '[object Function]';
@@ -1938,7 +1940,7 @@ function init (global) {
                 async: true
             }, function (resp) {
                 var isSuccess = resp.reason === nrdp.gibbon.SUCCESS,
-                    status = resp.status,
+                    status = resp.statusCode,
                     isOk = status >= 200 && status <= 300,
                     error;
 
@@ -1954,7 +1956,7 @@ function init (global) {
 
             timeoutId = setTimeout(
                 function () { doError('timeout'); },
-                config.waitSeconds
+                config.waitSeconds * 1000
             );
 
             return timeoutId;
@@ -2021,7 +2023,7 @@ function init (global) {
     }
     else if (isNrdp) {
         if (!cfg.baseUrl) {
-            cfg.baseUrl = './';
+            cfg.baseUrl = '.';
         }
     }
 
@@ -2114,7 +2116,7 @@ function init (global) {
     req(cfg);
 }
 // nrdp#ready wrapper
-if (typeof nrdp !== 'undefined') {
+if (typeof nrdp !== 'undefined' && !nrdp.isReady) {
     nrdp.addEventListener('init', function requireJsInit () {
         nrdp.removeEventListener('init', requireJsInit);
         init(this);

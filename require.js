@@ -201,13 +201,20 @@ var requirejs, require, define;
                 //Defaults. Do not set a default for map
                 //config to speed up normalize(), which
                 //will run faster if there is no default.
-                waitSeconds: 7,
+                waitSeconds: 0,
                 baseUrl: './',
                 paths: {},
                 bundles: {},
                 pkgs: {},
                 shim: {},
-                config: {}
+                config: {},
+                map: null,                  // null ~ no default
+                nodeIdCompat: false,        // default: no strict NodeJS require/define compatibility (=false) 
+                enforceDefine: false,       // default: simulate define() when it does not exist in the loaded script (=false) 
+                urlArgs: null,              // default: nil (this string is added as a URL query part to each file load)
+                context: null,              // default: defContextName: '_'
+                xhtml: false,               // default: HTML mode (=false)
+                scriptType: null            // default: 'text/javascript'
             },
             registry = {},
             //registry of just enabled modules, to speed

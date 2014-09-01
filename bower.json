@@ -12,9 +12,7 @@
   ],
   "ignore": [
     "**/*",
-    "!require.js",
-    "bower.json",
-    ".bower.json"
+    "!require.js"
   ],
   "license": "new BSD, and MIT"
 }

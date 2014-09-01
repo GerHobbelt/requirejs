@@ -12,7 +12,12 @@
   ],
   "ignore": [
     "**/.*",
-    "node_modules"
+    "node_modules",
+    "dist",
+    "docs",
+    "tests",
+    "!*.js",
+    "testBaseUrl.js"
   ],
   "license": "new BSD, and MIT"
 }

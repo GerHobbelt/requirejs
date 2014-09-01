@@ -10,5 +10,9 @@
   "keywords": [
     "AMD"
   ],
+  "ignore": [
+    "**/.*",
+    "node_modules"
+  ],
   "license": "new BSD, and MIT"
 }

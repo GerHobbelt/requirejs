@@ -11,13 +11,8 @@
     "AMD"
   ],
   "ignore": [
-    "**/.*",
-    "node_modules",
-    "dist",
-    "docs",
-    "tests",
-    "!*.js",
-    "testBaseUrl.js"
+    "**/*",
+    "!require.js"
   ],
   "license": "new BSD, and MIT"
 }

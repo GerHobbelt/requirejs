@@ -209,8 +209,8 @@ var requirejs, require, define;
                 shim: {},
                 config: {},
                 map: null,                  // null ~ no default
-                nodeIdCompat: false,        // default: no strict NodeJS require/define compatibility (=false) 
-                enforceDefine: false,       // default: simulate define() when it does not exist in the loaded script (=false) 
+                nodeIdCompat: false,        // default: no strict NodeJS require/define compatibility (=false)
+                enforceDefine: false,       // default: simulate define() when it does not exist in the loaded script (=false)
                 urlArgs: null,              // default: nil (this string is added as a URL query part to each file load)
                 context: null,              // default: defContextName: '_'
                 xhtml: false,               // default: HTML mode (=false)
@@ -1662,8 +1662,8 @@ var requirejs, require, define;
                     url = (url.charAt(0) === '/' || url.match(/^[\w\+\.\-]+:/) ? '' : config.baseUrl) + url;
                 }
 
-				// JS: add check for urls that begin with a //. 
-				// we don't want to add urlArgs to urls that we don't own.
+                // JS: add check for urls that begin with a //.
+                // we don't want to add urlArgs to urls that we don't own.
                 return config.urlArgs && ! /\/\//.test(url) ? url +
                                         ((url.indexOf('?') === -1 ? '?' : '&') +
                                          config.urlArgs) : url;
@@ -2003,7 +2003,7 @@ var requirejs, require, define;
                 //like a module name.
                 mainScript = mainScript.replace(jsSuffixRegExp, '');
 
-                 //If mainScript is still a path, fall back to dataMain
+                //If mainScript is still a path, fall back to dataMain
                 if (req.jsExtRegExp.test(mainScript)) {
                     mainScript = dataMain;
                 }

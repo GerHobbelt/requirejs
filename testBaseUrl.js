@@ -1,6 +1,6 @@
 define([], function() {
     doh.register(
-        "testBaseUrl", 
+        "testBaseUrl",
         [
             function testBaseUrl(t){
                 t.is(true, true);

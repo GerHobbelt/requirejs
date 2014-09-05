@@ -1766,7 +1766,7 @@ var requirejs, require, define;
             context = contexts[contextName] = req.s.newContext(contextName);
         }
 
-        console.log("AMD RequireJS require(deps, callback, errback, optional): ", deps, typeof callback, typeof errback, typeof optional, contextName, config, context, contexts);
+        //console.log("AMD RequireJS require(deps, callback, errback, optional): ", deps, typeof callback, typeof errback, typeof optional, contextName, config, context, contexts);
 
         if (config) {
             context.configure(config);
@@ -2040,7 +2040,7 @@ var requirejs, require, define;
             deps = null;
         }
 
-        console.log("AMD RequireJS define(name, deps, callback): ", name, deps, typeof callback);
+        //console.log("AMD RequireJS define(name, deps, callback): ", name, deps, typeof callback);
 
         //If no name, and callback is a function, then figure out if it a
         //CommonJS thing with dependencies.

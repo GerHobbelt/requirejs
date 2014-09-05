@@ -5,7 +5,7 @@
 # the the names specified below.
 
 RJS=../r.js
-if test -d ../r.js ; then
+if test -d $RJS ; then
     echo "Updating r.js"
     cp require.js $RJS/require.js
     cd $RJS
@@ -94,11 +94,24 @@ if test -d ../require-cs ; then
     cp $RJS/r.js ../require-cs/tools/r.js
 fi
 
+if test -d ../requirejs-coffeescript ; then
+    echo "Updating the require-cs CoffeeScript plugin"
+    cp require.js ../requirejs-coffeescript/demo/lib/require.js
+    cp $RJS/r.js ../requirejs-coffeescript/tools/r.js
+fi
+
 # The npm container stuff
 if test -d ../requirejs-npm/requirejs ; then
     echo "Updating requirejs-npm"
     cp require.js ../requirejs-npm/requirejs/require.js
     cp $RJS/r.js ../requirejs-npm/requirejs/bin/r.js
+fi
+
+# The handlebars plugin
+if test -d ../require-handlebars/requirejs ; then
+    echo "Updating require-handlebars"
+    #cp require.js ../require-handlebars/libs/require.js
+    cp $RJS/r.js ../require-handlebars/libs/r.js
 fi
 
 # The bower container stuff

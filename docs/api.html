@@ -97,6 +97,7 @@ up locations of a group of scripts. All of these capabilities allow you to use s
                 <li>canvas.js</li>
             </ul></li>
             <li>app.js</li>
+            <li>require.js</li>
         </ul></li>
     </ul></li>
 </ul>
@@ -175,7 +176,7 @@ require(['foo'], function(foo) {
 
 <pre><code>&lt;script src="scripts/require.js"&gt;&lt;/script&gt;
 &lt;script&gt;
-require(['scripts/config']), function() {
+require(['scripts/config'], function() {
     // Configuration loaded now, safe to do other require calls
     // that depend on that config.
     require(['foo'], function(foo) {
@@ -343,7 +344,7 @@ direct alignment of dependency name to the local variable used for that dependen
 
 <h4><a href="#modulenotes" name="modulenotes">Other Module Notes</a><span class="sectionMark">&sect; 1.3.7</span></h4>
 
-<p id="modulenotes-onemodule"><strong>One module per file.</strong>: Only one module should be defined per JavaScript file, given the nature of the module name-to-file-path lookup algorithm. Multiple modules will be grouped into optimized files by the <a href="optimization.html">optimization tool</a>, but you should only use the optimization tool to place more than one module in a file.</p>
+<p id="modulenotes-onemodule"><strong>One module per file.</strong>: Only one module should be defined per JavaScript file, given the nature of the module name-to-file-path lookup algorithm. You shoud only use the <a href="optimization.html">optimization tool</a> to group multiple modules into optimized files.</p>
 
 <p id="modulenotes-relative"><strong>Relative module names inside define()</strong>: For require("./relative/name") calls that can happen inside a define() function call, be sure to ask for "require" as a dependency, so that the relative name is resolved correctly:</p>
 
@@ -363,6 +364,39 @@ direct alignment of dependency name to the local variable used for that dependen
 
 <p>Relative paths are really useful if you are creating a few modules inside a directory, so that you can share the directory with other people or other projects, and you want to be able to get a handle on the sibling modules in that directory without
 having to know the directory's name.</p>
+
+<p id="modulenotes-relative-names"><strong>Relative module names are relative to other names, not paths</strong>: The loader stores modules by their name and not by their path internally. So for relative name references, those are resolved relative to the module name making the reference, then that module name, or ID, is converted to a path if needs to be loaded. Example code for a 'compute' package that has a 'main' and 'extras' modules in it:</p>
+
+<pre><code>* lib/
+    * compute/
+        * main.js
+        * extras.js
+</code></pre>
+
+<p>where the main.js module looks like this:</p>
+
+<pre><code>define(["./extras"], function(extras) {
+    //Uses extras in here.
+});
+</code></pre>
+
+<p>If this was the paths config:</p>
+
+<pre><code>require.config({
+    baseUrl: 'lib',
+    paths: {
+      'compute': 'compute/main'
+    }
+});
+</code></pre>
+
+<p>And a <code>require(['compute'])</code> is done, then lib/compute/main.js will have the module name of 'compute'. When it asks for './extras', that is resolved relative to 'compute', so 'compute/./extras', which normalizes to just 'extras'. Since there is no paths config for that module name, the path generated will be for 'lib/extras.js', which is incorrect.</p>
+
+<p>For this case, <a href="#packages">packages config</a> is a better option, since it allows setting the main module up as 'compute', but internally the loader will store the module with the ID of 'compute/main' so that the relative reference for './extras' works.</p>
+
+<p>Another option is to construct a module at lib/compute.js that is just <code>define(['./compute/main'], function(m) { return m; });</code>, then there is no need for paths or packages config.</p>
+
+<p>Or, do not set that paths or packages config and do the top level require call as <code>require(['compute/main'])</code>.</p>
 
 <p id="modulenotes-urls"><strong>Generate URLs relative to module</strong>: You may need to generate an URL that is relative to a module. To do so, ask for "require" as a dependency and then use require.toUrl() to generate the URL:</p>
 
@@ -486,7 +520,7 @@ module loading that may use that module. See the <a href="#errbacks">errback sec
 
 <p>RequireJS loads each dependency as a script tag, using head.appendChild().</p>
 
-<p>RequireJS waits for all dependencies to load, figures out the right order in which to call the functions that define the modules, then calls the module definition functions in the right order.</p>
+<p>RequireJS waits for all dependencies to load, figures out the right order in which to call the functions that define the modules, then calls the module definition functions once the dependencies for those functions have been called. Note that the dependencies for a given module definition function could be called in any order, due to their sub-dependency relationships and network load order.</p>
 
 <p>Using RequireJS in a server-side JavaScript environment that has synchronous loading should be as easy as redefining require.load(). The build system does this, the require.load method for that environment can be found in build/jslib/requirePatch.js.</p>
 
@@ -836,7 +870,7 @@ define(['module'], function (module) {
 
 <p id="config-packages"><strong><a href="#config-packages">packages</a></strong>: configures loading modules from CommonJS packages. See the <a href="#packages">packages topic</a> for more information.</p>
 
-<p id="config-nodeIdCompat"><strong><a href="#config-nodeIdCompat">nodeIdCompat</a></strong>: Node treats module ID <code>example.js</code> and <code>example</code> the same. By default these are two different IDs in RequireJS. If you end up using modules installed from npm, then you may need to set this config value to <code>true</code> to avoid resolution issues.</p>
+<p id="config-nodeIdCompat"><strong><a href="#config-nodeIdCompat">nodeIdCompat</a></strong>: Node treats module ID <code>example.js</code> and <code>example</code> the same. By default these are two different IDs in RequireJS. If you end up using modules installed from npm, then you may need to set this config value to <code>true</code> to avoid resolution issues. Available in 2.1.10 and greater.</p>
 
 <p id="config-waitSeconds"><strong><a href="#config-waitSeconds">waitSeconds</a></strong>: The number of seconds to wait before giving up on loading a script. Setting it to 0 disables the timeout. The default is 7 seconds.</p>
 

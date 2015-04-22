@@ -10,3 +10,7 @@ tests/packages/optimizing/built/
 # ignore editor bak files
 *~
 *.bak
+
+# github analysis scripts' temporaries
+__forks.info__/
+__forks__.dump_info

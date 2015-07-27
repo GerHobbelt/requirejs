@@ -2045,6 +2045,8 @@ var requirejs, require, define;
                     mainScript = dataMain;
                 }
 
+                dataMain = dataMain.replace( "\\", "/" );
+
                 //Put the data-main script in the files to load.
                 cfg.deps = cfg.deps ? cfg.deps.concat(mainScript) : [mainScript];
 

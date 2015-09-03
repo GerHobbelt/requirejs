@@ -77,6 +77,9 @@ if test -d ../../volojs/create-responsive-template ; then
     cp $RJS/r.js ../../volojs/create-responsive-template/tools/r.js
 fi
 
+echo "Updating amodrojs/amodro-trace"
+cp require.js ../../amodrojs/amodro-trace/lib/loader/require.js
+
 # The cajon project
 if test -d ../cajon/tools ; then
     echo "Updating the cajon project"

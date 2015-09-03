@@ -320,7 +320,7 @@ direct alignment of dependency name to the local variable used for that dependen
 
 <p>This wrapper relies on Function.prototype.toString() to give a useful string value of the function contents. This does not work on some devices like the PS3 and some older Opera mobile browsers. Use the <a href="optimization.html">optimizer</a> to pull out the dependencies in the array format for use on those devices.</p>
 
-<p>More information is available on the <a href="commonjs.html">CommonJS page</a>, and in the in the <a href="whyamd.html#sugar">"Sugar" section in the Why AMD page</a>.
+<p>More information is available on the <a href="commonjs.html">CommonJS page</a>, and in the <a href="whyamd.html#sugar">"Sugar" section in the Why AMD page</a>.
 </div>
 
 
@@ -1128,7 +1128,7 @@ See <a href="https://github.com/jrburke/r.js/blob/master/README.md">the r.js REA
 
 <p><b>NOTE</b>: If you do set enforceDefine: true, and you use data-main="" to load your main JS module, then that main JS module <b>must call define()</b> instead of require() to load the code it needs. The main JS module can still call require/requirejs to set config values, but for loading modules it should use define().</p>
 
-<p>If you then also use <a href="https://github.com/jrburke/almond">almond</a> to build your code without require.js, be sure to use the <a href="https://github.com/jrburke/r.js/blob/master/build/example.build.js#L289">insertRequire</a> build setting to insert a require call for the main module -- that serves the same purpose of the initial require() call that data-main does.</p>
+<p>If you then also use <a href="https://github.com/jrburke/almond">almond</a> to build your code without require.js, be sure to use the <a href="https://github.com/jrburke/r.js/blob/master/build/example.build.js#L413">insertRequire</a> build setting to insert a require call for the main module -- that serves the same purpose of the initial require() call that data-main does.</p>
 
 <h4>
 <a href="#errbacks" name="errbacks">require([]) errbacks</a>

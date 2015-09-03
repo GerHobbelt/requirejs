@@ -154,7 +154,7 @@ var requirejs, require, define;
     }
 
     /**
-     * Constructs an error with a pointer to an URL with more information.
+     * Constructs an error with a pointer to a URL with more information.
      * @param {String} id the error ID that maps to an ID on a web page.
      * @param {String} message human readable error.
      * @param {Error} [err] the original error, if there is one.
@@ -1465,7 +1465,7 @@ var requirejs, require, define;
                     isBrowser: isBrowser,
 
                     /**
-                     * Converts a module name + .extension into an URL path.
+                     * Converts a module name + .extension into a URL path.
                      * *Requires* the use of a module name. It does not support using
                      * plain URLs like nameToUrl.
                      */
@@ -1628,13 +1628,13 @@ var requirejs, require, define;
 
             /**
              * Converts a module name to a file path. Supports cases where
-             * moduleName may actually be just an URL.
+             * moduleName may actually be just a URL.
              * Note that it **does not** call normalize on the moduleName,
              * it is assumed to have already been normalized. This is an
              * internal API, not a public one. Use toUrl for the public API.
              */
             nameToUrl: function (moduleName, ext, skipExt) {
-                var paths, syms, i, parentModule, url,
+                var paths, syms, i, parentModule, url, jsExt,
                     parentPath, bundleId,
                     pkgMain = getOwn(config.pkgs, moduleName);
 
@@ -1648,9 +1648,9 @@ var requirejs, require, define;
                     return context.nameToUrl(bundleId, ext, skipExt);
                 }
 
-                //If a colon is in the URL, it indicates a protocol is used and it is just
-                //an URL to a file, or if it starts with a slash, contains a query arg (i.e. ?)
-                //or ends with .js, then assume the user meant to use an url and not a module id.
+                //If a :// is in the URL, it indicates a protocol is used and it is just
+                //a URL to a file, or if it starts with a slash, contains a query arg (i.e. ?)
+                //or ends with .js, then assume the user meant to use a url and not a module id.
                 //The slash is important for protocol-less URLs as well as full paths.
                 if (req.jsExtRegExp.test(moduleName)) {
                     //Just a plain path, not module name lookup, so just return it.
@@ -1682,7 +1682,11 @@ var requirejs, require, define;
 
                     //Join the path parts together, then figure out if baseUrl is needed.
                     url = syms.join('/');
-                    url += (ext || (/^data\:|\?/.test(url) || skipExt ? '' : '.js'));
+
+                    //We don't want to add the cacheSuffix to urls that we don't own.
+                    jsExt = ((!url.match(/^[\w\+\.\-]+:/) && config.cacheSuffix) ? config.cacheSuffix : '') + '.js';
+
+                    url += (ext || (/^data\:|\?/.test(url) || skipExt ? '' : jsExt));
                 }
                 url = normalize((url.charAt(0) === '/' || url.match(/^[\w\+\.\-]+:/) ? '' : config.baseUrl) + url);
 
@@ -1827,7 +1831,7 @@ var requirejs, require, define;
     req.version = version;
 
     //Used to filter out dependencies that are already paths.
-    req.jsExtRegExp = /^\/|:|\?|\.js$/;
+    req.jsExtRegExp = /^\/|:\/\/|\?|\.js$/;
     req.isBrowser = isBrowser;
     s = req.s = {
         contexts: contexts,
@@ -1898,9 +1902,24 @@ var requirejs, require, define;
             node;
         if (isBrowser) {
             //In the browser so use a script tag
-            node = req.createNode(config, moduleName, url);
-            if (config.onNodeCreated) {
-                config.onNodeCreated(node, config, moduleName, url);
+            var findScriptBySrc = function(src) {
+                var scripts = document.scripts;
+                for (var i = 0, len = scripts.length; i < len; i++) {
+                    var script = scripts[i];
+                    if (script.src === src) {
+                        return script;
+                    }
+                }
+            }
+
+            var existingNode = false;
+            if ((node = findScriptBySrc(src))) {
+                existingNode = true;
+            } else {
+                node = req.createNode(config, moduleName, url);
+                if (config.onNodeCreated) {
+                    config.onNodeCreated(node, config, moduleName, url);
+                }
             }
 
             node.setAttribute('data-requirecontext', context.contextName);
@@ -1947,19 +1966,22 @@ var requirejs, require, define;
                 node.addEventListener('load', context.onScriptLoad, false);
                 node.addEventListener('error', context.onScriptError, false);
             }
-            node.src = url;
 
-            //For some cache cases in IE 6-8, the script executes before the end
-            //of the appendChild execution, so to tie an anonymous define
-            //call to the module name (which is stored on the node), hold on
-            //to a reference to this node, but clear after the DOM insertion.
-            currentlyAddingScript = node;
-            if (baseElement) {
-                head.insertBefore(node, baseElement);
-            } else {
-                head.appendChild(node);
+            if (!existingNode) {
+                node.src = url;
+
+                //For some cache cases in IE 6-8, the script executes before the end
+                //of the appendChild execution, so to tie an anonymous define
+                //call to the module name (which is stored on the node), hold on
+                //to a reference to this node, but clear after the DOM insertion.
+                currentlyAddingScript = node;
+                if (baseElement) {
+                    head.insertBefore(node, baseElement);
+                } else {
+                    head.appendChild(node);
+                }
+                currentlyAddingScript = null;
             }
-            currentlyAddingScript = null;
 
             return node;
         } else if (isWebWorker) {
@@ -2034,6 +2056,8 @@ var requirejs, require, define;
                 if (req.jsExtRegExp.test(mainScript)) {
                     mainScript = dataMain;
                 }
+
+                dataMain = dataMain.replace( "\\", "/" );
 
                 //Put the data-main script in the files to load.
                 cfg.deps = cfg.deps ? cfg.deps.concat(mainScript) : [mainScript];

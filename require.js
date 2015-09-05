@@ -32,6 +32,7 @@ var requirejs, require, define;
         defContextName = '_',
         //Oh the tragedy, detecting opera. See the usage of isOpera for reason.
         isOpera = typeof opera !== 'undefined' && opera.toString() === '[object Opera]',
+        msieVersion = (navigator.userAgent.toLowerCase().indexOf('msie') != -1) ? parseInt(navigator.userAgent.toLowerCase().split('msie')[1]) : false,
         contexts = {},
         cfg = {},
         globalDefQueue = [],
@@ -1636,7 +1637,8 @@ var requirejs, require, define;
             nameToUrl: function (moduleName, ext, skipExt) {
                 var paths, syms, i, parentModule, url, jsExt,
                     parentPath, bundleId,
-                    pkgMain = getOwn(config.pkgs, moduleName);
+                    pkgMain = getOwn(config.pkgs, moduleName),
+                    cdnHost;
 
                 if (pkgMain) {
                     moduleName = pkgMain;
@@ -1692,9 +1694,18 @@ var requirejs, require, define;
 
                 // JS: add check for urls that begin with a //.
                 // we don't want to add urlArgs to urls that we don't own.
-                return config.urlArgs && ! /\/\//.test(url) ? url +
+                url = config.urlArgs ? url +
                                         ((url.indexOf('?') === -1 ? '?' : '&') +
                                          config.urlArgs) : url;
+
+                if (isFunction(cfg.getCdn)) {
+                    cdnHost = cfg.getCdn(moduleName);
+                    if (cdnHost) {
+                        url = url.replace(url.match(/http(s)?:\/\/[\w\d\.].*?\//)[0], cdnHost + '/');
+                    }
+                }
+
+                return url;
             },
 
             //Delegates to req.load. Broken out as a separate function to
@@ -1800,6 +1811,10 @@ var requirejs, require, define;
             context.configure(config);
         }
 
+        if (config && isFunction(config.getCdn)) {
+            cfg.getCdn = config.getCdn;
+        }
+
         return context.require(deps, callback, errback);
     };
 
@@ -1817,9 +1832,13 @@ var requirejs, require, define;
      * that have a better solution than setTimeout.
      * @param  {Function} fn function to execute later.
      */
-    req.nextTick = typeof setTimeout !== 'undefined' ? function (fn) {
-        setTimeout(fn, 4);
-    } : function (fn) { fn(); };
+    if (msieVersion <= 9) {
+        req.nextTick = typeof setTimeout !== 'undefined' ? function (fn) {
+            setTimeout(fn, 4);
+        } : function (fn) { fn(); };
+    } else {
+        req.nextTick = function (fn) { fn(); };
+    }
 
     /**
      * Export require as a global, but only if it does not already exist.

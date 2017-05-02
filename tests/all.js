@@ -12,6 +12,11 @@ doh.registerUrl("baseUrl", "../baseUrl.html");
 
 doh.registerUrl("toUrl", "../toUrl/toUrl.html");
 doh.registerUrl("urlArgsToUrl", "../urlArgsToUrl.html");
+doh.registerUrl("urlArgsToUrlFunction", "../urlArgsToUrlFunction.html");
+
+if (typeof Blob === 'function') {
+    doh.registerUrl("urlArgsBlob", "../urlArgsBlob.html");
+}
 
 doh.registerUrl("config", "../config.html");
 doh.registerUrl("configRequirejs", "../configRequirejs.html");
@@ -19,6 +24,7 @@ doh.registerUrl("dataMain", "../dataMain/dataMain.html");
 doh.registerUrl("skipDataMain", "../dataMain/skipDataMain/skipDataMain.html");
 doh.registerUrl("dataMainIndex", "../dataMain/dataMainIndex/dataMainIndex.html");
 doh.registerUrl("dataMainBaseUrl", "../dataMain/baseUrl/dataMainBaseUrl.html");
+doh.registerUrl("dataMainPlugin", "../dataMain/dataMainPlugin/dataMainPlugin.html");
 
 doh.registerUrl("moduleExports", "../moduleExports/moduleExports.html");
 
@@ -26,6 +32,7 @@ if (hasToString) {
     doh.registerUrl("anonSimple", "../anon/anonSimple.html");
     doh.registerUrl("cjsSpace", "../cjsSpace/cjsSpace.html");
     doh.registerUrl("cjsDotRequire", "../cjsSpace/cjsDotRequire.html");
+    doh.registerUrl("commentParen", "../commentParen/commentParen.html");
     doh.registerUrl("packages", "../packages/packages.html");
     doh.registerUrl("packagesConfig", "../packages/config/config.html");
     doh.registerUrl("packagesMultiLevel", "../packagesMultiLevel/packagesMultiLevel.html");
@@ -148,7 +155,6 @@ doh.registerUrl("pluginNormalize", "../plugins/pluginNormalize/pluginNormalize.h
 doh.registerUrl("requirePluginLoad", "../requirePluginLoad/requirePluginLoad.html");
 
 doh.registerUrl("requireAsync", "../requireAsync/requireAsync.html");
-doh.registerUrl("requireError", "../requireError/requireError.html");
 
 doh.registerUrl("issue379", "../issue379/issue379.html");
 

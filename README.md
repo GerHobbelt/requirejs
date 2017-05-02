@@ -30,14 +30,18 @@ of a module in a page. RequireJS also has a plugin system that supports features
 [text file dependencies](http://requirejs.org/docs/api.html#text).
 
 RequireJS does not have any dependencies on a JavaScript framework.
-It is dual-licensed -- new BSD or MIT.
-
-The standard require.js file is around 5.5KB when minified via Closure Compiler
-and gzipped.
 
 RequireJS works in IE 6+, Firefox 2+, Safari 3.2+, Chrome 3+, and Opera 10+.
 
 [Latest Release](http://requirejs.org/docs/download.html)
+
+## License
+
+MIT
+
+## Code of Conduct
+
+[jQuery Foundation Code of Conduct](https://jquery.org/conduct/).
 
 ## Directories
 
@@ -59,7 +63,7 @@ This repo assumes some other repos are checked out as siblings to this repo:
     git clone https://github.com/requirejs/text.git
     git clone https://github.com/requirejs/i18n.git
     git clone https://github.com/requirejs/domReady.git
-    git clone https://github.com/jrburke/requirejs.git
+    git clone https://github.com/requirejs/requirejs.git
 
 So when the above clones are done, the directory structure should look like:
 
